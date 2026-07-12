@@ -1,31 +1,31 @@
-# VedaAI - AI-Powered Curriculum & Assignment Engineering Platform
+# PrepStackAI - AI-Powered Curriculum & Assignment Engineering Platform
 
-VedaAI is a high-fidelity, premium SaaS platform designed for educators and teachers to instantly formulate curriculum-aligned question papers and solution schemes. By parsing raw course materials (PDFs, Microsoft Word `.docx` files, and images) and leveraging **Gemini 2.5 Flash**, VedaAI generates beautiful, printable A4 question sheets with institution-branded letterheads, custom visual badges, and separated teacher answer keys.
+PrepStackAI is a high-fidelity, premium SaaS platform designed for educators and teachers to instantly formulate curriculum-aligned question papers and solution schemes. By parsing raw course materials (PDFs, Microsoft Word `.docx` files, and images) and leveraging **Gemini 2.5 Flash**, PrepStackAI generates beautiful, printable A4 question sheets with institution-branded letterheads, custom visual badges, and separated teacher answer keys.
 
 ---
 
 ## 🌟 Key Features
 
-*   **Generative Question Formulation**: calibrates dynamic prompts using **Gemini 2.5 Flash** to structure multi-section question sheets based on customizable Marks, Topic, Class Grade, Question Types, and specific teacher instructions.
-*   **Dual-Column Authentication & Interactive Onboarding**:
-    *   Sleek Login / Sign Up portal featuring password visibility micro-interactions and a full-bleed visual grid showcasing branding graphics.
-    *   A 3-step Onboarding wizard allowing educators to customize their preset avatar, specify their institution name and location, and toggle target teaching subjects and grade filters.
-*   **Strict Multi-User Session Isolation**: Dynamically scopes assignments and profile parameters utilizing account-specific tokens (`vedaai_profile_${userEmail}` and `x-user-email` headers). Multiple teachers can test the same browser sandbox without data leakage or skipped onboarding steps.
-*   **Multi-Format Document Parsing**: Uses magic-byte binary header matching and the `mammoth` parser to dynamically extract curriculum text from uploaded PDFs, images, and `.docx` structures.
-*   **Resilient Queued Generation**: Implements a robust background task pipeline utilizing **BullMQ** and **Redis** to execute generation jobs, supported by an exponential backoff wrapper (`generateWithRetry`) to dynamically handle rate limits or transient upstream 503 outages.
-*   **Premium Printable A4 PDF Exports**: 
-    *   **Independent PDF Compilation**: Separate downloads for **Question Paper PDF** and **Answer Key PDF** in high-definition using `jspdf` and `html2canvas-pro`.
-    *   **Tailwind CSS v4 Compatibility**: Switches standard capturing to `html2canvas-pro` to successfully parse modern wide-gamut CSS Level 4 color functions (`oklab()`, `oklch()`).
-    *   **Zero-Student Leak Print Design**: Custom print layouts equipped with `print:hidden` overlays, ensuring standard browser printing (Cmd+P) outputs *only* the student question paper.
+- **Generative Question Formulation**: calibrates dynamic prompts using **Gemini 2.5 Flash** to structure multi-section question sheets based on customizable Marks, Topic, Class Grade, Question Types, and specific teacher instructions.
+- **Dual-Column Authentication & Interactive Onboarding**:
+  - Sleek Login / Sign Up portal featuring password visibility micro-interactions and a full-bleed visual grid showcasing branding graphics.
+  - A 3-step Onboarding wizard allowing educators to customize their preset avatar, specify their institution name and location, and toggle target teaching subjects and grade filters.
+- **Strict Multi-User Session Isolation**: Dynamically scopes assignments and profile parameters utilizing account-specific tokens (`PrepStackai_profile_${userEmail}` and `x-user-email` headers). Multiple teachers can test the same browser sandbox without data leakage or skipped onboarding steps.
+- **Multi-Format Document Parsing**: Uses magic-byte binary header matching and the `mammoth` parser to dynamically extract curriculum text from uploaded PDFs, images, and `.docx` structures.
+- **Resilient Queued Generation**: Implements a robust background task pipeline utilizing **BullMQ** and **Redis** to execute generation jobs, supported by an exponential backoff wrapper (`generateWithRetry`) to dynamically handle rate limits or transient upstream 503 outages.
+- **Premium Printable A4 PDF Exports**:
+  - **Independent PDF Compilation**: Separate downloads for **Question Paper PDF** and **Answer Key PDF** in high-definition using `jspdf` and `html2canvas-pro`.
+  - **Tailwind CSS v4 Compatibility**: Switches standard capturing to `html2canvas-pro` to successfully parse modern wide-gamut CSS Level 4 color functions (`oklab()`, `oklch()`).
+  - **Zero-Student Leak Print Design**: Custom print layouts equipped with `print:hidden` overlays, ensuring standard browser printing (Cmd+P) outputs _only_ the student question paper.
 
 ---
 
 ## 🏗️ Monorepo Architecture
 
-VedaAI is organized as a clean, unified monorepo:
+PrepStackAI is organized as a clean, unified monorepo:
 
 ```text
-VedaAI/
+PrepStackAI/
 ├── backend/                  # Express.js server & BullMQ background worker
 │   ├── src/
 │   │   ├── config/           # Mongoose DB & Redis connections
@@ -58,20 +58,24 @@ VedaAI/
 ## ⚡ Prerequisites
 
 To run this project locally, ensure you have the following installed:
-*   [Node.js](https://nodejs.org/) (v18+ recommended)
-*   [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-*   [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for MongoDB & Redis persistence)
+
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for MongoDB & Redis persistence)
 
 ---
 
 ## 🚀 Getting Started
 
 ### Step 1: Spin up Local Databases (Docker)
+
 In the root directory of the monorepo, spin up MongoDB and Redis in detached mode:
+
 ```bash
 docker-compose up -d
 ```
-*This starts MongoDB on port `27017` and Redis on port `6379`.*
+
+_This starts MongoDB on port `27017` and Redis on port `6379`._
 
 ---
 
@@ -80,10 +84,11 @@ docker-compose up -d
 Create `.env` files in both directories according to the templates below.
 
 #### Backend Configuration (`backend/.env`):
+
 ```env
 PORT=5001
-MONGODB_URI=mongodb+srv://<user>:<password>@vedaai.mongodb.net/
-# OR for local docker: MONGODB_URI=mongodb://localhost:27017/vedaai
+MONGODB_URI=mongodb+srv://<user>:<password>@PrepStackai.mongodb.net/
+# OR for local docker: MONGODB_URI=mongodb://localhost:27017/PrepStackai
 
 GEMINI_API_KEY=AIzaSy...   # Your Gemini API Key
 
@@ -108,7 +113,7 @@ Open two terminals inside the `backend` folder:
     ```bash
     npm run dev
     ```
-    *Starts the server on port `5001`.*
+    _Starts the server on port `5001`._
 3.  **Start the BullMQ worker processor** (in the second terminal):
     ```bash
     npm run worker
@@ -129,14 +134,14 @@ Open a terminal inside the `frontend` folder:
     ```bash
     npm run dev
     ```
-    *Starts the Next.js portal on `http://localhost:3000`.*
+    _Starts the Next.js portal on `http://localhost:3000`._
 
 ---
 
 ## 🧪 Testing User Sessions Locally
 
 1.  Open your browser to `http://localhost:3000`. You will be intercepted by the auth guard and routed to the gorgeous `/login` column portal.
-2.  Register a new account (e.g., `teacherA@gmail.com`). You will be taken to the onboarding flow to set your school details (e.g. *Navyug Convent School*, *New Delhi*).
+2.  Register a new account (e.g., `teacherA@gmail.com`). You will be taken to the onboarding flow to set your school details (e.g. _Navyug Convent School_, _New Delhi_).
 3.  Fill in the assignment criteria, upload study notes if desired, and click **Create Assignment**. Watch the minimalist stepper dashboard formulating questions via BullMQ.
 4.  Download the **Question Paper PDF** and **Answer Key PDF** separately. Verify that clicking standard prints excludes the answers automatically.
 5.  Click **Log Out** in the sidebar. Register a second account (`teacherB@gmail.com`). Notice the app forces Onboarding setup again and loads an entirely separate, isolated sandbox dashboard!

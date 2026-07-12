@@ -97,7 +97,7 @@ const page = () => {
     formData.append("file", file);
 
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
       const response = await fetch(`${BACKEND_URL}/api/upload`, {
         method: "POST",
         headers: {
@@ -140,10 +140,10 @@ const page = () => {
 
       const userEmail =
         typeof window !== "undefined"
-          ? localStorage.getItem("vedaai_user_email") || ""
+          ? localStorage.getItem("PrepStackai_user_email") || ""
           : "";
 
-      const token = localStorage.getItem("vedaai_auth_token") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
       const response = await fetch(`${BACKEND_URL}/api/assignments`, {
         method: "POST",
         headers: {
@@ -174,7 +174,9 @@ const page = () => {
 
       // Save notification to client localStorage
       try {
-        const stored = localStorage.getItem(`vedaai_notifications_${userEmail}`);
+        const stored = localStorage.getItem(
+          `PrepStackai_notifications_${userEmail}`,
+        );
         const currentNotifications = stored ? JSON.parse(stored) : [];
         const newNotification = {
           id: Date.now().toString(),
@@ -182,11 +184,14 @@ const page = () => {
           description: `${subject} - ${topic} (${className})`,
           link: `/assignment/${data.assignmentId}`,
           timestamp: "Just now",
-          unread: true
+          unread: true,
         };
         const updated = [newNotification, ...currentNotifications];
-        localStorage.setItem(`vedaai_notifications_${userEmail}`, JSON.stringify(updated));
-        window.dispatchEvent(new Event("vedaai_notification_sync"));
+        localStorage.setItem(
+          `PrepStackai_notifications_${userEmail}`,
+          JSON.stringify(updated),
+        );
+        window.dispatchEvent(new Event("PrepStackai_notification_sync"));
       } catch (err) {
         console.error("Failed to save assignment notification:", err);
       }
@@ -202,7 +207,6 @@ const page = () => {
 
   return (
     <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-4 lg:py-6 font-bricolage text-black min-h-[85vh] pb-24 relative flex flex-col gap-5 lg:gap-6">
-      
       {/* 📱 Mobile Page Title & Back Arrow (Mockup 2) */}
       <div className="flex lg:hidden items-center gap-4 mt-2 px-1">
         <button
@@ -211,16 +215,22 @@ const page = () => {
         >
           <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
         </button>
-        <h2 className="text-xl font-bold tracking-tight text-zinc-800">Create Assignment</h2>
+        <h2 className="text-xl font-bold tracking-tight text-zinc-800">
+          Create Assignment
+        </h2>
       </div>
 
       {/* 🟢 Desktop Top Title Banner Card (Hidden on Mobile) */}
       <div className="hidden lg:flex flex-col gap-1">
         <div className="flex items-center gap-3">
           <span className="w-3.5 h-3.5 rounded-full bg-[#82C43C] border-2 border-white shadow-md animate-pulse"></span>
-          <h2 className="text-2xl font-bold text-black tracking-tight">Create Assignment</h2>
+          <h2 className="text-2xl font-bold text-black tracking-tight">
+            Create Assignment
+          </h2>
         </div>
-        <p className="text-[#5E5E5ECC] text-sm pl-6.5">Set up a new assignment for your students</p>
+        <p className="text-[#5E5E5ECC] text-sm pl-6.5">
+          Set up a new assignment for your students
+        </p>
       </div>
 
       {/* Stepper horizontal line */}
@@ -230,10 +240,13 @@ const page = () => {
 
       {/* Main Form details card (Mockup 2 Container) */}
       <div className="bg-white rounded-3xl p-5 lg:p-8 border border-zinc-200/60 shadow-[0_4px_40px_rgba(0,0,0,0.01)] flex flex-col gap-6 lg:gap-8">
-        
         <div>
-          <h3 className="text-lg lg:text-xl font-black text-black uppercase tracking-tight">Assignment Details</h3>
-          <p className="text-[#5E5E5ECC] text-xs mt-0.5">Basic information about your assignment</p>
+          <h3 className="text-lg lg:text-xl font-black text-black uppercase tracking-tight">
+            Assignment Details
+          </h3>
+          <p className="text-[#5E5E5ECC] text-xs mt-0.5">
+            Basic information about your assignment
+          </p>
         </div>
 
         {/* Drag & Drop File Upload Box (Mockup 2) */}
@@ -257,13 +270,21 @@ const page = () => {
             {isUploading ? (
               <div className="flex flex-col items-center gap-3">
                 <div className="w-8 h-8 border-4 border-zinc-950 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-sm font-semibold text-zinc-500 animate-pulse">Uploading file...</p>
+                <p className="text-sm font-semibold text-zinc-500 animate-pulse">
+                  Uploading file...
+                </p>
               </div>
             ) : fileUrl ? (
               <div className="flex flex-col items-center gap-2">
-                <span className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-black">✓</span>
-                <p className="text-sm font-bold text-emerald-600">Material Uploaded successfully!</p>
-                <p className="text-[11px] text-zinc-400 truncate max-w-[300px]">{fileUrl}</p>
+                <span className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-black">
+                  ✓
+                </span>
+                <p className="text-sm font-bold text-emerald-600">
+                  Material Uploaded successfully!
+                </p>
+                <p className="text-[11px] text-zinc-400 truncate max-w-[300px]">
+                  {fileUrl}
+                </p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-3">
@@ -271,8 +292,12 @@ const page = () => {
                   <UploadCloud className="w-6 h-6 stroke-[1.8]" />
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-black text-black leading-tight">Choose a file or drag & drop it here</p>
-                  <p className="text-[10px] lg:text-xs text-[#5E5E5ECC] mt-1 font-bold">JPEG, PNG, upto 10MB</p>
+                  <p className="text-sm font-black text-black leading-tight">
+                    Choose a file or drag & drop it here
+                  </p>
+                  <p className="text-[10px] lg:text-xs text-[#5E5E5ECC] mt-1 font-bold">
+                    JPEG, PNG, upto 10MB
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -291,7 +316,9 @@ const page = () => {
         {/* 🆕 Subject and Topic Inputs (Responsive Stacked Grid) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">Subject</label>
+            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">
+              Subject
+            </label>
             <input
               type="text"
               placeholder="e.g. Science, English..."
@@ -301,7 +328,9 @@ const page = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">Topic</label>
+            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">
+              Topic
+            </label>
             <input
               type="text"
               placeholder="e.g. Electroplating, NCERT..."
@@ -315,7 +344,9 @@ const page = () => {
         {/* 🆕 Class & Time Inputs (Responsive Stacked Grid) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">Class / Grade</label>
+            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">
+              Class / Grade
+            </label>
             <input
               type="text"
               placeholder="e.g. Class VIII, Grade 10..."
@@ -325,7 +356,9 @@ const page = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">Time Allotted</label>
+            <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">
+              Time Allotted
+            </label>
             <input
               type="text"
               placeholder="e.g. 45 minutes, 3 Hours..."
@@ -338,7 +371,9 @@ const page = () => {
 
         {/* Due Date Selector (Mockup 2) */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">Due Date</label>
+          <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">
+            Due Date
+          </label>
           <div className="relative w-full">
             <input
               type="date"
@@ -353,21 +388,26 @@ const page = () => {
 
         {/* Dynamic Question Type Row Builders */}
         <div className="flex flex-col gap-3 lg:gap-4">
-          <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">Question Type</label>
+          <label className="text-xs lg:text-sm font-black text-black uppercase tracking-wide">
+            Question Type
+          </label>
 
           {/* Desktop view headers */}
           <div className="hidden lg:grid grid-cols-[1fr_auto_130px_130px] gap-4 px-2">
             <span className="text-sm font-bold text-zinc-500">Type</span>
             <span className="w-5"></span>
-            <span className="text-sm font-bold text-zinc-500 text-center">No. of Questions</span>
-            <span className="text-sm font-bold text-zinc-500 text-center">Marks</span>
+            <span className="text-sm font-bold text-zinc-500 text-center">
+              No. of Questions
+            </span>
+            <span className="text-sm font-bold text-zinc-500 text-center">
+              Marks
+            </span>
           </div>
 
           {/* Dynamic Question Types List (Mockup 2 Layout for Mobile vs Table for Desktop) */}
           <div className="flex flex-col gap-4">
             {questionRows.map((row) => (
               <React.Fragment key={row.id}>
-                
                 {/* 💻 Desktop Table Row Layout */}
                 <div className="hidden lg:grid grid-cols-[1fr_auto_130px_130px] items-center gap-4">
                   <div className="relative">
@@ -376,7 +416,9 @@ const page = () => {
                       onChange={(e) => {
                         const val = e.target.value;
                         setQuestionRows((prev) =>
-                          prev.map((r) => r.id === row.id ? { ...r, type: val } : r)
+                          prev.map((r) =>
+                            r.id === row.id ? { ...r, type: val } : r,
+                          ),
                         );
                       }}
                       className="w-full bg-[#F5F5F5] font-bold text-sm text-zinc-800 px-4 py-3 rounded-xl border border-transparent outline-none appearance-none cursor-pointer pr-10"
@@ -405,7 +447,9 @@ const page = () => {
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span className="font-bold text-black text-sm">{row.count}</span>
+                    <span className="font-bold text-black text-sm">
+                      {row.count}
+                    </span>
                     <button
                       onClick={() => updateRowQuantity(row.id, "count", "inc")}
                       className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-zinc-500 hover:bg-zinc-100 cursor-pointer shadow-sm active:scale-95"
@@ -422,7 +466,9 @@ const page = () => {
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span className="font-bold text-black text-sm">{row.marks}</span>
+                    <span className="font-bold text-black text-sm">
+                      {row.marks}
+                    </span>
                     <button
                       onClick={() => updateRowQuantity(row.id, "marks", "inc")}
                       className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-zinc-500 hover:bg-zinc-100 cursor-pointer shadow-sm active:scale-95"
@@ -434,7 +480,6 @@ const page = () => {
 
                 {/* 📱 Mobile Card Layout (Mockup 2) */}
                 <div className="flex lg:hidden flex-col gap-4 border border-zinc-200/80 rounded-3xl p-4 bg-[#FAFADA]/20 shadow-sm relative">
-                  
                   {/* Selector Header */}
                   <div className="flex justify-between items-center gap-3">
                     <div className="relative flex-1">
@@ -443,7 +488,9 @@ const page = () => {
                         onChange={(e) => {
                           const val = e.target.value;
                           setQuestionRows((prev) =>
-                            prev.map((r) => r.id === row.id ? { ...r, type: val } : r)
+                            prev.map((r) =>
+                              r.id === row.id ? { ...r, type: val } : r,
+                            ),
                           );
                         }}
                         className="w-full bg-white font-bold text-xs text-zinc-800 px-4 py-2.5 rounded-xl border border-zinc-200 outline-none appearance-none cursor-pointer pr-10 shadow-sm"
@@ -469,17 +516,25 @@ const page = () => {
                   <div className="grid grid-cols-2 gap-3">
                     {/* No. of Questions */}
                     <div className="flex flex-col gap-1 bg-[#F5F5F5] p-3 rounded-2xl items-center shadow-inner">
-                      <span className="text-[9px] font-black text-zinc-400 uppercase tracking-wider">No. of Questions</span>
+                      <span className="text-[9px] font-black text-zinc-400 uppercase tracking-wider">
+                        No. of Questions
+                      </span>
                       <div className="flex items-center justify-between bg-white px-2 py-1 rounded-full w-full max-w-[100px] border border-zinc-200/60 shadow-sm mt-1.5">
                         <button
-                          onClick={() => updateRowQuantity(row.id, "count", "dec")}
+                          onClick={() =>
+                            updateRowQuantity(row.id, "count", "dec")
+                          }
                           className="w-6 h-6 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-500 hover:bg-zinc-100 cursor-pointer"
                         >
                           <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
                         </button>
-                        <span className="font-black text-black text-xs">{row.count}</span>
+                        <span className="font-black text-black text-xs">
+                          {row.count}
+                        </span>
                         <button
-                          onClick={() => updateRowQuantity(row.id, "count", "inc")}
+                          onClick={() =>
+                            updateRowQuantity(row.id, "count", "inc")
+                          }
                           className="w-6 h-6 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-500 hover:bg-zinc-100 cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -489,17 +544,25 @@ const page = () => {
 
                     {/* Marks Counter */}
                     <div className="flex flex-col gap-1 bg-[#F5F5F5] p-3 rounded-2xl items-center shadow-inner">
-                      <span className="text-[9px] font-black text-zinc-400 uppercase tracking-wider">Marks</span>
+                      <span className="text-[9px] font-black text-zinc-400 uppercase tracking-wider">
+                        Marks
+                      </span>
                       <div className="flex items-center justify-between bg-white px-2 py-1 rounded-full w-full max-w-[100px] border border-zinc-200/60 shadow-sm mt-1.5">
                         <button
-                          onClick={() => updateRowQuantity(row.id, "marks", "dec")}
+                          onClick={() =>
+                            updateRowQuantity(row.id, "marks", "dec")
+                          }
                           className="w-6 h-6 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-500 hover:bg-zinc-100 cursor-pointer"
                         >
                           <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
                         </button>
-                        <span className="font-black text-black text-xs">{row.marks}</span>
+                        <span className="font-black text-black text-xs">
+                          {row.marks}
+                        </span>
                         <button
-                          onClick={() => updateRowQuantity(row.id, "marks", "inc")}
+                          onClick={() =>
+                            updateRowQuantity(row.id, "marks", "inc")
+                          }
                           className="w-6 h-6 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-500 hover:bg-zinc-100 cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -507,9 +570,7 @@ const page = () => {
                       </div>
                     </div>
                   </div>
-
                 </div>
-
               </React.Fragment>
             ))}
           </div>
@@ -532,7 +593,9 @@ const page = () => {
           <div className="flex gap-6 text-[11px] lg:text-sm font-bold text-black">
             <div>
               Total Questions :{" "}
-              <span className="text-zinc-500 font-extrabold">{totalQuestions}</span>
+              <span className="text-zinc-500 font-extrabold">
+                {totalQuestions}
+              </span>
             </div>
             <div>
               Total Marks :{" "}
@@ -573,7 +636,6 @@ const page = () => {
             <ArrowRight className="w-4 h-4 stroke-[2]" />
           </button>
         </div>
-
       </div>
     </div>
   );

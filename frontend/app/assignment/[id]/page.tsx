@@ -77,7 +77,7 @@ export default function AssignmentOutputPage({ params }: PageProps) {
   const [schoolName, setSchoolName] = useState("");
 
   const progressSteps = [
-    "Submitting request to VedaAI generation queue...",
+    "Submitting request to PrepStackAI generation queue...",
     "Retrieving context syllabus and attached documents...",
     "Formulating custom curriculum questions",
     "Generating detailed solutions for your Answer Key...",
@@ -104,7 +104,7 @@ export default function AssignmentOutputPage({ params }: PageProps) {
     setProgressStep(0);
 
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
       const res = await fetch(
         `${BACKEND_URL}/api/assignments/${id}/regenerate`,
         {
@@ -163,7 +163,9 @@ export default function AssignmentOutputPage({ params }: PageProps) {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`VedaAI_Paper_${assignment?.topic || "Question_Paper"}.pdf`);
+      pdf.save(
+        `PrepStackAI_Paper_${assignment?.topic || "Question_Paper"}.pdf`,
+      );
     } catch (err: any) {
       console.error("Failed to generate PDF:", err);
       alert(
@@ -213,7 +215,9 @@ export default function AssignmentOutputPage({ params }: PageProps) {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`VedaAI_AnswerKey_${assignment?.topic || "Answer_Key"}.pdf`);
+      pdf.save(
+        `PrepStackAI_AnswerKey_${assignment?.topic || "Answer_Key"}.pdf`,
+      );
     } catch (err: any) {
       console.error("Failed to generate Answer Key PDF:", err);
       alert(`Failed to render Answer Key PDF document: ${err?.message || err}`);
@@ -251,8 +255,8 @@ export default function AssignmentOutputPage({ params }: PageProps) {
     const fetchData = async () => {
       try {
         // Read dynamic school details from profile
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
-        const stored = localStorage.getItem(`vedaai_profile_${userEmail}`);
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+        const stored = localStorage.getItem(`PrepStackai_profile_${userEmail}`);
         if (stored) {
           const profile = JSON.parse(stored);
           if (profile.schoolName) {
@@ -263,7 +267,7 @@ export default function AssignmentOutputPage({ params }: PageProps) {
           }
         }
 
-        const token = localStorage.getItem("vedaai_auth_token") || "";
+        const token = localStorage.getItem("PrepStackai_auth_token") || "";
         const resAssignment = await fetch(
           `${BACKEND_URL}/api/assignments/${id}`,
           {
@@ -278,14 +282,11 @@ export default function AssignmentOutputPage({ params }: PageProps) {
         setStatus(assignmentData.status);
 
         if (assignmentData.status === "completed") {
-          const resPaper = await fetch(
-            `${BACKEND_URL}/api/papers/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+          const resPaper = await fetch(`${BACKEND_URL}/api/papers/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-          );
+          });
           if (resPaper.ok) {
             const paperData = await resPaper.json();
             setPaper(paperData);
@@ -309,44 +310,46 @@ export default function AssignmentOutputPage({ params }: PageProps) {
     const socket = io(BACKEND_URL);
 
     socket.on("connect", () => {
-      console.log("Connected to VedaAI WebSockets");
+      console.log("Connected to PrepStackAI WebSockets");
     });
 
     socket.on("generation:complete", async (data) => {
       if (data.assignmentId === id) {
         setStatus("completed");
-        
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
-        
+
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+
         // Save success notification to client localStorage
         try {
-          const stored = localStorage.getItem(`vedaai_notifications_${userEmail}`);
+          const stored = localStorage.getItem(
+            `PrepStackai_notifications_${userEmail}`,
+          );
           const currentNotifications = stored ? JSON.parse(stored) : [];
           const newNotification = {
             id: Date.now().toString(),
             title: "Question Paper Ready! ✨",
-            description: `VedaAI has successfully generated the question paper and answer key for "${assignment?.topic || "your assignment"}".`,
+            description: `PrepStackAI has successfully generated the question paper and answer key for "${assignment?.topic || "your assignment"}".`,
             link: `/assignment/${id}`,
             timestamp: "Just now",
-            unread: true
+            unread: true,
           };
           const updated = [newNotification, ...currentNotifications];
-          localStorage.setItem(`vedaai_notifications_${userEmail}`, JSON.stringify(updated));
-          window.dispatchEvent(new Event("vedaai_notification_sync"));
+          localStorage.setItem(
+            `PrepStackai_notifications_${userEmail}`,
+            JSON.stringify(updated),
+          );
+          window.dispatchEvent(new Event("PrepStackai_notification_sync"));
         } catch (err) {
           console.error("Failed to save complete notification:", err);
         }
 
         try {
-          const token = localStorage.getItem("vedaai_auth_token") || "";
-          const resPaper = await fetch(
-            `${BACKEND_URL}/api/papers/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
+          const token = localStorage.getItem("PrepStackai_auth_token") || "";
+          const resPaper = await fetch(`${BACKEND_URL}/api/papers/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-          );
+          });
           if (resPaper.ok) {
             const paperData = await resPaper.json();
             setPaper(paperData);
@@ -374,7 +377,7 @@ export default function AssignmentOutputPage({ params }: PageProps) {
 
     const poll = async () => {
       try {
-        const token = localStorage.getItem("vedaai_auth_token") || "";
+        const token = localStorage.getItem("PrepStackai_auth_token") || "";
         const res = await fetch(`${BACKEND_URL}/api/assignments/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -425,7 +428,7 @@ export default function AssignmentOutputPage({ params }: PageProps) {
       <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-12 flex flex-col items-center justify-center min-h-[60vh] font-bricolage text-black">
         <Loader2 className="w-10 h-10 animate-spin text-zinc-800 mb-4" />
         <p className="font-semibold text-zinc-500 animate-pulse">
-          Initializing VedaAI...
+          Initializing PrepStackAI...
         </p>
       </div>
     );

@@ -15,8 +15,8 @@ import templateRoutes from "./routes/templates.route";
 const ALLOWED_ORIGINS = [
   "http://localhost:3000",
   "http://localhost:5173",
-  "https://vedaai-mkhh.onrender.com",
-  "https://veda-ai-sage-nine.vercel.app",
+  "https://PrepStackai-mkhh.onrender.com",
+  "https://PrepStack-ai-sage-nine.vercel.app",
 ];
 
 const app = express();
@@ -55,7 +55,7 @@ if (rawPort) {
     PORT = parsed;
   } else {
     console.warn(
-      `[VedaAI] WARNING: PORT environment variable ("${rawPort}") is not a valid number. Falling back to default port 5001.`,
+      `[PrepStackAI] WARNING: PORT environment variable ("${rawPort}") is not a valid number. Falling back to default port 5001.`,
     );
   }
 }

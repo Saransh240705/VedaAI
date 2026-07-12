@@ -1,7 +1,7 @@
 {
-  "name": "vedaai-monorepo",
+  "name": "PrepStackai-monorepo",
   "version": "1.0.0",
-  "description": "VedaAI Monorepo containing Next.js frontend and Express/BullMQ backend",
+  "description": "PrepStackAI Monorepo containing Next.js frontend and Express/BullMQ backend",
   "private": true,
   "scripts": {
     "postinstall": "npm run install:all",

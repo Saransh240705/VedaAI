@@ -35,8 +35,8 @@ export default function OnboardingPage() {
   // Pre-load registration name if available
   useEffect(() => {
     try {
-      const userEmail = localStorage.getItem("vedaai_user_email") || "";
-      const stored = localStorage.getItem(`vedaai_profile_${userEmail}`);
+      const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+      const stored = localStorage.getItem(`PrepStackai_profile_${userEmail}`);
       if (stored) {
         const profile = JSON.parse(stored);
         if (profile.userName) setUserName(profile.userName);
@@ -104,8 +104,8 @@ export default function OnboardingPage() {
   const handleCompleteOnboarding = async () => {
     setIsFinishing(true);
 
-    const token = localStorage.getItem("vedaai_auth_token") || "";
-    const userEmail = localStorage.getItem("vedaai_user_email") || "";
+    const token = localStorage.getItem("PrepStackai_auth_token") || "";
+    const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
 
     const updatedProfile = {
       userName,
@@ -137,24 +137,24 @@ export default function OnboardingPage() {
 
       // Synchronize local storage for instant sync backward compatibility
       localStorage.setItem(
-        `vedaai_profile_${userEmail}`,
+        `PrepStackai_profile_${userEmail}`,
         JSON.stringify(updatedProfile),
       );
-      localStorage.setItem(`vedaai_onboarded_${userEmail}`, "true");
+      localStorage.setItem(`PrepStackai_onboarded_${userEmail}`, "true");
 
       // Dispatch sync event to instantly update SideBar and NavBar
-      window.dispatchEvent(new Event("vedaai_auth_sync"));
+      window.dispatchEvent(new Event("PrepStackai_auth_sync"));
 
       router.push("/assignment");
     } catch (err) {
       console.error("Onboarding error:", err);
       // Fallback gracefully to localStorage
       localStorage.setItem(
-        `vedaai_profile_${userEmail}`,
+        `PrepStackai_profile_${userEmail}`,
         JSON.stringify(updatedProfile),
       );
-      localStorage.setItem(`vedaai_onboarded_${userEmail}`, "true");
-      window.dispatchEvent(new Event("vedaai_auth_sync"));
+      localStorage.setItem(`PrepStackai_onboarded_${userEmail}`, "true");
+      window.dispatchEvent(new Event("PrepStackai_auth_sync"));
       router.push("/assignment");
     } finally {
       setIsFinishing(false);

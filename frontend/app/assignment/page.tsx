@@ -1,21 +1,21 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { 
-  Plus, 
-  Search, 
-  MoreVertical, 
-  Calendar, 
-  BookOpen, 
-  Trash2, 
-  Eye, 
-  Filter, 
-  Loader2, 
+import {
+  Plus,
+  Search,
+  MoreVertical,
+  Calendar,
+  BookOpen,
+  Trash2,
+  Eye,
+  Filter,
+  Loader2,
   Sparkles,
   CheckCircle2,
   XCircle,
   AlertCircle,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,19 +42,19 @@ export default function AssignmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("all");
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
-  
+
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch all assignments
   const fetchAssignments = async () => {
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
-      const userEmail = localStorage.getItem("vedaai_user_email") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
+      const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
       const res = await fetch(`${BACKEND_URL}/api/assignments`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "x-user-email": userEmail
-        }
+          Authorization: `Bearer ${token}`,
+          "x-user-email": userEmail,
+        },
       });
       if (res.ok) {
         const data = await res.json();
@@ -74,7 +74,10 @@ export default function AssignmentsPage() {
   // Handle clicking outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setOpenDropdownId(null);
       }
     };
@@ -88,16 +91,16 @@ export default function AssignmentsPage() {
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    
+
     if (!confirm("Are you sure you want to delete this assignment?")) return;
 
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
       const res = await fetch(`${BACKEND_URL}/api/assignments/${id}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (res.ok) {
         setAssignments((prev) => prev.filter((item) => item._id !== id));
@@ -116,11 +119,12 @@ export default function AssignmentsPage() {
 
   // Filtered list
   const filteredAssignments = assignments.filter((a) => {
-    const matchesSearch = 
-      a.topic.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch =
+      a.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
       a.subject.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesSubject = subjectFilter === "all" || a.subject === subjectFilter;
+
+    const matchesSubject =
+      subjectFilter === "all" || a.subject === subjectFilter;
 
     return matchesSearch && matchesSubject;
   });
@@ -129,7 +133,9 @@ export default function AssignmentsPage() {
     return (
       <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-24 flex flex-col items-center justify-center min-h-[50vh] font-bricolage text-black">
         <Loader2 className="w-10 h-10 animate-spin text-orange-500 mb-4" />
-        <p className="font-semibold text-zinc-500 animate-pulse">Loading assignments...</p>
+        <p className="font-semibold text-zinc-500 animate-pulse">
+          Loading assignments...
+        </p>
       </div>
     );
   }
@@ -143,12 +149,12 @@ export default function AssignmentsPage() {
           <div className="relative mb-6 flex items-center justify-center w-[300px] h-[300px]">
             {/* Custom Soft Backdrop Circle */}
             <div className="absolute rounded-full bg-[#f2f2f2] w-[240px] h-[240px] -z-10 shadow-sm"></div>
-            
-            <Image 
-              src="/NoAssignments.png" 
-              alt="No Assignments" 
-              width={260} 
-              height={260} 
+
+            <Image
+              src="/NoAssignments.png"
+              alt="No Assignments"
+              width={260}
+              height={260}
               priority
               className="object-contain relative z-10"
               style={{ height: "auto" }}
@@ -162,8 +168,9 @@ export default function AssignmentsPage() {
 
           {/* Description Paragraph */}
           <p className="font-bricolage text-[#5E5E5ECC] text-sm leading-relaxed mb-8 px-6">
-            Create your first assignment to start collecting and grading student submissions. 
-            You can set up rubrics, define marking criteria, and let AI assist with grading.
+            Create your first assignment to start collecting and grading student
+            submissions. You can set up rubrics, define marking criteria, and
+            let AI assist with grading.
           </p>
 
           <Link href="/create-assignment">
@@ -173,14 +180,12 @@ export default function AssignmentsPage() {
             </button>
           </Link>
         </div>
-
       </div>
     );
   }
 
   return (
     <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-4 lg:py-6 font-bricolage text-black min-h-[80vh] flex flex-col gap-5 lg:gap-6 pb-24 relative">
-      
       {/* 📱 Mobile Page Title & Back Arrow (Mockup 1) */}
       <div className="flex lg:hidden items-center gap-4 mt-2 px-1">
         <button
@@ -189,7 +194,9 @@ export default function AssignmentsPage() {
         >
           <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
         </button>
-        <h2 className="text-xl font-bold tracking-tight text-zinc-800">Assignments</h2>
+        <h2 className="text-xl font-bold tracking-tight text-zinc-800">
+          Assignments
+        </h2>
       </div>
 
       {/* 🟢 Desktop Top Title Banner Card (Hidden on Mobile) */}
@@ -197,9 +204,13 @@ export default function AssignmentsPage() {
         <div className="absolute top-0 left-0 w-2 h-full bg-[#3CC878]"></div>
         <div className="flex items-center gap-2.5">
           <div className="w-3.5 h-3.5 rounded-full bg-[#3CC878] animate-pulse"></div>
-          <h2 className="text-2xl font-black text-zinc-900 tracking-tight">Assignments</h2>
+          <h2 className="text-2xl font-black text-zinc-900 tracking-tight">
+            Assignments
+          </h2>
         </div>
-        <p className="text-zinc-500 text-sm pl-6 mt-1">Manage and create assignments for your classes.</p>
+        <p className="text-zinc-500 text-sm pl-6 mt-1">
+          Manage and create assignments for your classes.
+        </p>
       </div>
 
       {/* 🔍 Search & Filter Bar (Mockup 1) */}
@@ -214,7 +225,9 @@ export default function AssignmentsPage() {
           >
             <option value="all">Filter</option>
             {uniqueSubjects.map((sub) => (
-              <option key={sub} value={sub}>{sub}</option>
+              <option key={sub} value={sub}>
+                {sub}
+              </option>
             ))}
           </select>
         </div>
@@ -236,9 +249,14 @@ export default function AssignmentsPage() {
       {filteredAssignments.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-3xl border border-zinc-100">
           <AlertCircle className="w-12 h-12 text-zinc-300 mb-3" />
-          <p className="font-semibold text-zinc-500 text-base">No assignments match your filter criteria.</p>
-          <button 
-            onClick={() => { setSearchQuery(""); setSubjectFilter("all"); }}
+          <p className="font-semibold text-zinc-500 text-base">
+            No assignments match your filter criteria.
+          </p>
+          <button
+            onClick={() => {
+              setSearchQuery("");
+              setSubjectFilter("all");
+            }}
             className="mt-3 text-sm text-orange-500 hover:text-orange-600 font-bold underline cursor-pointer"
           >
             Clear Filters
@@ -248,17 +266,20 @@ export default function AssignmentsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
           {filteredAssignments.map((a) => {
             const isDropdownOpen = openDropdownId === a._id;
-            
+
             // Format dates
-            const assignedDate = new Date(a.createdAt).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric"
-            });
+            const assignedDate = new Date(a.createdAt).toLocaleDateString(
+              "en-GB",
+              {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              },
+            );
             const dueDate = new Date(a.dueDate).toLocaleDateString("en-GB", {
               day: "2-digit",
               month: "2-digit",
-              year: "numeric"
+              year: "numeric",
             });
 
             return (
@@ -267,7 +288,6 @@ export default function AssignmentsPage() {
                 onClick={() => router.push(`/assignment/${a._id}`)}
                 className="group relative bg-[#FFFFFF] rounded-3xl p-5 lg:p-6 border border-zinc-200 shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.04)] hover:border-zinc-300 transition-all duration-300 flex flex-col justify-between min-h-[140px] lg:min-h-[180px] cursor-pointer"
               >
-                
                 {/* Top Row: Title, Muted subject pill, 3-dots */}
                 <div className="flex justify-between items-start gap-4">
                   <div className="flex flex-col gap-1">
@@ -275,7 +295,7 @@ export default function AssignmentsPage() {
                       <span className="bg-zinc-100 text-zinc-600 text-[9px] lg:text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 lg:py-1 rounded-full">
                         {a.subject}
                       </span>
-                      
+
                       {/* Status Badges */}
                       {a.status === "processing" && (
                         <span className="bg-amber-50 text-amber-600 border border-amber-200/50 text-[8px] lg:text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 animate-pulse">
@@ -303,7 +323,10 @@ export default function AssignmentsPage() {
                   </div>
 
                   {/* 3-dots Dropdown */}
-                  <div className="relative" ref={isDropdownOpen ? dropdownRef : null}>
+                  <div
+                    className="relative"
+                    ref={isDropdownOpen ? dropdownRef : null}
+                  >
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -341,7 +364,9 @@ export default function AssignmentsPage() {
                 <div className="hidden lg:flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-4 mt-6 text-xs text-zinc-500 font-semibold">
                   <div className="flex items-center gap-1.5">
                     <span className="text-zinc-400">Assigned on:</span>
-                    <span className="text-zinc-800 font-bold">{assignedDate}</span>
+                    <span className="text-zinc-800 font-bold">
+                      {assignedDate}
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-1.5 bg-zinc-50 px-2.5 py-1 rounded-full border border-zinc-100">
@@ -353,10 +378,17 @@ export default function AssignmentsPage() {
 
                 {/* Mobile view (Mockup 1) */}
                 <div className="flex lg:hidden items-center text-[11px] text-zinc-500 font-bold mt-4 tracking-tight border-t border-zinc-100/50 pt-3">
-                  <span>Assigned on : <span className="text-zinc-400 font-bold">{assignedDate}</span></span>
-                  <span className="ml-5">Due : <span className="text-zinc-400 font-bold">{dueDate}</span></span>
+                  <span>
+                    Assigned on :{" "}
+                    <span className="text-zinc-400 font-bold">
+                      {assignedDate}
+                    </span>
+                  </span>
+                  <span className="ml-5">
+                    Due :{" "}
+                    <span className="text-zinc-400 font-bold">{dueDate}</span>
+                  </span>
                 </div>
-
               </div>
             );
           })}
@@ -371,7 +403,6 @@ export default function AssignmentsPage() {
           </button>
         </Link>
       </div>
-
     </div>
   );
 }

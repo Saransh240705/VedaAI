@@ -1,4 +1,4 @@
-# VedaAI Monorepo GitIgnore Configuration
+# PrepStackAI Monorepo GitIgnore Configuration
 
 # Dependencies (Globally ignore node_modules across monorepo)
 **/node_modules/

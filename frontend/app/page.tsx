@@ -7,8 +7,8 @@ export default function RootPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("vedaai_auth_token");
-    const onboarded = localStorage.getItem("vedaai_onboarded") === "true";
+    const token = localStorage.getItem("PrepStackai_auth_token");
+    const onboarded = localStorage.getItem("PrepStackai_onboarded") === "true";
     if (!token) {
       router.replace("/login");
     } else if (!onboarded) {
@@ -20,7 +20,9 @@ export default function RootPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center font-bricolage bg-[#fafafa]">
-      <p className="text-zinc-400 font-semibold animate-pulse">Loading VedaAI Dashboard...</p>
+      <p className="text-zinc-400 font-semibold animate-pulse">
+        Loading PrepStack AI Dashboard...
+      </p>
     </div>
   );
 }

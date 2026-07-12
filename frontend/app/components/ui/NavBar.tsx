@@ -1,11 +1,6 @@
 "use client";
 
-import { 
-  ArrowLeft, 
-  Bell, 
-  ChevronDown, 
-  LayoutGrid
-} from "lucide-react";
+import { ArrowLeft, Bell, ChevronDown, LayoutGrid } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -25,22 +20,27 @@ const NavBar = () => {
 
   const fetchNotifications = () => {
     try {
-      const userEmail = localStorage.getItem("vedaai_user_email") || "";
-      const stored = localStorage.getItem(`vedaai_notifications_${userEmail}`);
+      const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+      const stored = localStorage.getItem(
+        `PrepStackai_notifications_${userEmail}`,
+      );
       if (stored) {
         setNotifications(JSON.parse(stored));
       } else {
         const welcomeNote = [
           {
             id: "welcome",
-            title: "Welcome to Veda AI!",
+            title: "Welcome to PrepStack AI!",
             description: "Start creating custom class assessments instantly.",
             link: "/create-assignment",
             timestamp: "Just now",
-            unread: true
-          }
+            unread: true,
+          },
         ];
-        localStorage.setItem(`vedaai_notifications_${userEmail}`, JSON.stringify(welcomeNote));
+        localStorage.setItem(
+          `PrepStackai_notifications_${userEmail}`,
+          JSON.stringify(welcomeNote),
+        );
         setNotifications(welcomeNote);
       }
     } catch (err) {
@@ -51,8 +51,8 @@ const NavBar = () => {
   useEffect(() => {
     const fetchProfile = () => {
       try {
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
-        const stored = localStorage.getItem(`vedaai_profile_${userEmail}`);
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+        const stored = localStorage.getItem(`PrepStackai_profile_${userEmail}`);
         if (stored) {
           const profile = JSON.parse(stored);
           if (profile.userName) setUserName(profile.userName);
@@ -65,7 +65,7 @@ const NavBar = () => {
 
     fetchProfile();
     fetchNotifications();
-    
+
     // Periodically update profile reactive details
     const interval = setInterval(fetchProfile, 2000);
 
@@ -73,12 +73,12 @@ const NavBar = () => {
       fetchNotifications();
     };
 
-    window.addEventListener("vedaai_notification_sync", handleSync);
+    window.addEventListener("PrepStackai_notification_sync", handleSync);
     window.addEventListener("storage", handleSync);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener("vedaai_notification_sync", handleSync);
+      window.removeEventListener("PrepStackai_notification_sync", handleSync);
       window.removeEventListener("storage", handleSync);
     };
   }, []);
@@ -90,18 +90,26 @@ const NavBar = () => {
   };
 
   const handleNotificationClick = (id: string, link: string) => {
-    const userEmail = localStorage.getItem("vedaai_user_email") || "";
-    const updated = notifications.map((n) => n.id === id ? { ...n, unread: false } : n);
-    localStorage.setItem(`vedaai_notifications_${userEmail}`, JSON.stringify(updated));
+    const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+    const updated = notifications.map((n) =>
+      n.id === id ? { ...n, unread: false } : n,
+    );
+    localStorage.setItem(
+      `PrepStackai_notifications_${userEmail}`,
+      JSON.stringify(updated),
+    );
     setNotifications(updated);
     setShowDropdown(false);
     router.push(link);
   };
 
   const handleClearAll = () => {
-    const userEmail = localStorage.getItem("vedaai_user_email") || "";
+    const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
     const updated = notifications.map((n) => ({ ...n, unread: false }));
-    localStorage.setItem(`vedaai_notifications_${userEmail}`, JSON.stringify(updated));
+    localStorage.setItem(
+      `PrepStackai_notifications_${userEmail}`,
+      JSON.stringify(updated),
+    );
     setNotifications(updated);
   };
 
@@ -137,7 +145,7 @@ const NavBar = () => {
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        
+
         {/* Dynamic Breadcrumb (Desktop only) */}
         <div className="hidden lg:flex ml-4 text-[#5E5E5ECC] gap-2 items-center">
           <LayoutGrid className="w-4 h-4 text-zinc-400" />
@@ -147,21 +155,23 @@ const NavBar = () => {
         {/* Brand Logo (Mobile only) */}
         <div className="flex lg:hidden items-center gap-2 pl-2">
           <Image
-            src="/Logo.png"
+            src="/icon.jpeg"
             alt="Logo"
             width={32}
             height={32}
             style={{ width: "32px", height: "auto" }}
             className="object-contain"
           />
-          <span className="text-xl font-black text-black tracking-tight">VedaAI</span>
+          <span className="text-xl font-black text-black tracking-tight">
+            PrepStackAI
+          </span>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
         {/* Notification Bell Wrapper with Dropdown */}
         <div className="relative">
-          <div 
+          <div
             onClick={handleBellClick}
             className="bg-[#f5f5f5] p-2 rounded-full flex justify-center items-center cursor-pointer hover:bg-zinc-200/50 transition-colors"
           >
@@ -177,9 +187,11 @@ const NavBar = () => {
           {showDropdown && (
             <div className="absolute right-0 top-11 w-80 bg-white rounded-3xl border border-zinc-200/80 shadow-2xl p-4 flex flex-col gap-3 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="flex justify-between items-center border-b border-zinc-100 pb-2">
-                <h3 className="text-xs font-black text-zinc-950 uppercase tracking-tight">Notifications</h3>
+                <h3 className="text-xs font-black text-zinc-950 uppercase tracking-tight">
+                  Notifications
+                </h3>
                 {unreadCount > 0 && (
-                  <button 
+                  <button
                     onClick={handleClearAll}
                     className="text-[9px] text-zinc-400 hover:text-zinc-600 font-bold uppercase hover:underline cursor-pointer"
                   >
@@ -193,15 +205,25 @@ const NavBar = () => {
                   notifications.map((note) => (
                     <div
                       key={note.id}
-                      onClick={() => handleNotificationClick(note.id, note.link)}
+                      onClick={() =>
+                        handleNotificationClick(note.id, note.link)
+                      }
                       className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col gap-0.5 text-left ${note.unread ? "bg-orange-50/20 border-orange-100/50 hover:bg-orange-50/40" : "bg-white border-zinc-100 hover:bg-zinc-50"}`}
                     >
                       <div className="flex justify-between items-start gap-1">
-                        <h4 className="text-xs font-black text-zinc-900 truncate flex-1">{note.title}</h4>
-                        {note.unread && <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] shrink-0 mt-1"></span>}
+                        <h4 className="text-xs font-black text-zinc-900 truncate flex-1">
+                          {note.title}
+                        </h4>
+                        {note.unread && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A1F] shrink-0 mt-1"></span>
+                        )}
                       </div>
-                      <p className="text-[10px] text-zinc-500 font-semibold leading-normal">{note.description}</p>
-                      <span className="text-[8px] text-zinc-400 mt-1 font-bold">{note.timestamp}</span>
+                      <p className="text-[10px] text-zinc-500 font-semibold leading-normal">
+                        {note.description}
+                      </p>
+                      <span className="text-[8px] text-zinc-400 mt-1 font-bold">
+                        {note.timestamp}
+                      </span>
                     </div>
                   ))
                 ) : (
@@ -213,32 +235,32 @@ const NavBar = () => {
             </div>
           )}
         </div>
-        
+
         {/* Profile Navigator */}
         <Link href="/profile" className="flex items-center">
           {/* Desktop User Info Pill */}
           <div className="hidden lg:flex bg-[#FFFFFF] rounded-full p-2 gap-2 shadow-sm border border-zinc-200/10 hover:bg-zinc-50 transition-colors cursor-pointer">
-            <Image 
-              src={avatar} 
-              alt="avatar" 
-              width={40} 
-              height={40} 
-              className="rounded-full object-cover h-10 w-10 border border-zinc-100" 
+            <Image
+              src={avatar}
+              alt="avatar"
+              width={40}
+              height={40}
+              className="rounded-full object-cover h-10 w-10 border border-zinc-100"
             />
             <h3 className="font-bricolage flex items-center font-bold text-[13px] text-zinc-800">
-              {userName} 
+              {userName}
               <ChevronDown className="w-3.5 h-3.5 ml-1 text-zinc-500" />
             </h3>
           </div>
 
           {/* Mobile User Avatar */}
           <div className="flex lg:hidden rounded-full overflow-hidden border border-zinc-200/40 shadow-sm cursor-pointer">
-            <Image 
-              src={avatar} 
-              alt="avatar" 
-              width={36} 
-              height={36} 
-              className="rounded-full object-cover h-9 w-9" 
+            <Image
+              src={avatar}
+              alt="avatar"
+              width={36}
+              height={36}
+              className="rounded-full object-cover h-9 w-9"
             />
           </div>
         </Link>

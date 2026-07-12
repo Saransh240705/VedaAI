@@ -21,9 +21,9 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const handleLogout = () => {
-    if (!confirm("Are you sure you want to log out of VedaAI?")) return;
-    localStorage.removeItem("vedaai_auth_token");
-    window.dispatchEvent(new Event("vedaai_auth_sync"));
+    if (!confirm("Are you sure you want to log out of PrepStackAI?")) return;
+    localStorage.removeItem("PrepStackai_auth_token");
+    window.dispatchEvent(new Event("PrepStackai_auth_sync"));
     router.replace("/login");
   };
 
@@ -50,8 +50,8 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        const token = localStorage.getItem("vedaai_auth_token") || "";
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
+        const token = localStorage.getItem("PrepStackai_auth_token") || "";
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
 
         const res = await fetch(`${BACKEND_URL}/api/auth/me`, {
           headers: {
@@ -75,7 +75,7 @@ export default function ProfilePage() {
               avatar: data.user.avatar,
             };
             localStorage.setItem(
-              `vedaai_profile_${userEmail}`,
+              `PrepStackai_profile_${userEmail}`,
               JSON.stringify(profile),
             );
             return;
@@ -89,8 +89,8 @@ export default function ProfilePage() {
       }
 
       try {
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
-        const stored = localStorage.getItem(`vedaai_profile_${userEmail}`);
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+        const stored = localStorage.getItem(`PrepStackai_profile_${userEmail}`);
         if (stored) {
           const profile = JSON.parse(stored);
           if (profile.userName) setUserName(profile.userName);
@@ -115,7 +115,7 @@ export default function ProfilePage() {
     formData.append("file", file);
 
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
       const response = await fetch(`${BACKEND_URL}/api/upload`, {
         method: "POST",
         headers: {
@@ -136,8 +136,8 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    const token = localStorage.getItem("vedaai_auth_token") || "";
-    const userEmail = localStorage.getItem("vedaai_user_email") || "";
+    const token = localStorage.getItem("PrepStackai_auth_token") || "";
+    const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
     const profile = {
       userName,
       schoolName,
@@ -165,12 +165,12 @@ export default function ProfilePage() {
       }
 
       localStorage.setItem(
-        `vedaai_profile_${userEmail}`,
+        `PrepStackai_profile_${userEmail}`,
         JSON.stringify(profile),
       );
 
       // Dispatch sync event to instantly update SideBar and NavBar
-      window.dispatchEvent(new Event("vedaai_auth_sync"));
+      window.dispatchEvent(new Event("PrepStackai_auth_sync"));
 
       setShowSuccessNotification(true);
       setTimeout(() => setShowSuccessNotification(false), 3000);
@@ -178,10 +178,10 @@ export default function ProfilePage() {
       console.error("Failed to save profile:", err);
       // Fallback
       localStorage.setItem(
-        `vedaai_profile_${userEmail}`,
+        `PrepStackai_profile_${userEmail}`,
         JSON.stringify(profile),
       );
-      window.dispatchEvent(new Event("vedaai_auth_sync"));
+      window.dispatchEvent(new Event("PrepStackai_auth_sync"));
       setShowSuccessNotification(true);
       setTimeout(() => setShowSuccessNotification(false), 3000);
     } finally {
@@ -191,7 +191,6 @@ export default function ProfilePage() {
 
   return (
     <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-4 lg:py-6 font-bricolage text-black min-h-[80vh] flex flex-col gap-5 lg:gap-6 pb-24 relative">
-      
       {/* 📱 Mobile Page Title & Back Arrow */}
       <div className="flex lg:hidden items-center gap-4 mt-2 px-1">
         <button
@@ -200,7 +199,9 @@ export default function ProfilePage() {
         >
           <ArrowLeft className="w-5 h-5 stroke-[2.5]" />
         </button>
-        <h2 className="text-xl font-bold tracking-tight text-zinc-800">Teacher Profile</h2>
+        <h2 className="text-xl font-bold tracking-tight text-zinc-800">
+          Teacher Profile
+        </h2>
       </div>
 
       {/* Page Header (Desktop only) */}
@@ -287,7 +288,7 @@ export default function ProfilePage() {
               className="flex items-center justify-center gap-2 w-full max-w-[200px] border border-rose-200 hover:bg-rose-50 text-rose-600 hover:text-rose-700 text-xs font-bold px-4 py-2.5 rounded-full cursor-pointer transition-all active:scale-[0.98]"
             >
               <LogOut className="w-3.5 h-3.5" />
-              Log Out of VedaAI
+              Log Out of PrepStackAI
             </button>
           </div>
         </div>

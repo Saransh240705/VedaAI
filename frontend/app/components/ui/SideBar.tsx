@@ -27,11 +27,11 @@ const SideBar = () => {
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const token = localStorage.getItem("vedaai_auth_token") || "";
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
+        const token = localStorage.getItem("PrepStackai_auth_token") || "";
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
         const res = await fetch(`${BACKEND_URL}/api/assignments`, {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "x-user-email": userEmail,
           },
         });
@@ -46,8 +46,8 @@ const SideBar = () => {
 
     const fetchProfile = () => {
       try {
-        const userEmail = localStorage.getItem("vedaai_user_email") || "";
-        const stored = localStorage.getItem(`vedaai_profile_${userEmail}`);
+        const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+        const stored = localStorage.getItem(`PrepStackai_profile_${userEmail}`);
         if (stored) {
           const profile = JSON.parse(stored);
           if (profile.schoolName) setSchoolName(profile.schoolName);
@@ -72,13 +72,13 @@ const SideBar = () => {
   }, []);
 
   const handleLogout = () => {
-    if (!confirm("Are you sure you want to log out of VedaAI?")) return;
+    if (!confirm("Are you sure you want to log out of PrepStackAI?")) return;
 
     // Clear user tokens
-    localStorage.removeItem("vedaai_auth_token");
+    localStorage.removeItem("PrepStackai_auth_token");
 
     // Trigger the session listener to immediately redirect
-    window.dispatchEvent(new Event("vedaai_auth_sync"));
+    window.dispatchEvent(new Event("PrepStackai_auth_sync"));
   };
 
   return (
@@ -88,14 +88,14 @@ const SideBar = () => {
         <Link href="/">
           <div className="flex gap-1.5 items-center cursor-pointer">
             <Image
-              src="/Logo.png"
+              src="/icon.jpeg"
               alt="Logo"
               width={40}
               height={40}
               style={{ width: "40px", height: "auto" }}
             />
             <h1 className="font-bricolage text-black text-3xl font-black tracking-tight">
-              VedaAI
+              PrepStackAI
             </h1>
           </div>
         </Link>
@@ -122,8 +122,6 @@ const SideBar = () => {
         {/* Sidebar Navigation Menu Items */}
         <div className="flex justify-center mt-12">
           <ul className="flex flex-col gap-2 font-bricolage w-60">
-            
-
             <li>
               <Link href={"/my-groups"}>
                 <div
@@ -159,7 +157,9 @@ const SideBar = () => {
 
             <li>
               <Link href={"/toolkit"}>
-                <div className={`flex items-center w-full p-2.5 pl-3.5 rounded-xl gap-3 transition-all ${pathname === "/toolkit" ? "bg-[#F0F0F0] text-black font-black" : "text-[#5E5E5ECC] hover:bg-[#F5F5F5] hover:text-zinc-800"}`}>
+                <div
+                  className={`flex items-center w-full p-2.5 pl-3.5 rounded-xl gap-3 transition-all ${pathname === "/toolkit" ? "bg-[#F0F0F0] text-black font-black" : "text-[#5E5E5ECC] hover:bg-[#F5F5F5] hover:text-zinc-800"}`}
+                >
                   <Book className="size-4.5" />
                   <h3 className="text-sm font-bold">AI Teacher’s Toolkit</h3>
                 </div>
@@ -168,7 +168,9 @@ const SideBar = () => {
 
             <li>
               <Link href={"/library"}>
-                <div className={`flex items-center w-full p-2.5 pl-3.5 rounded-xl gap-3 transition-all ${pathname === "/library" ? "bg-[#F0F0F0] text-black font-black" : "text-[#5E5E5ECC] hover:bg-[#F5F5F5] hover:text-zinc-800"}`}>
+                <div
+                  className={`flex items-center w-full p-2.5 pl-3.5 rounded-xl gap-3 transition-all ${pathname === "/library" ? "bg-[#F0F0F0] text-black font-black" : "text-[#5E5E5ECC] hover:bg-[#F5F5F5] hover:text-zinc-800"}`}
+                >
                   <ChartPie className="size-4.5" />
                   <h3 className="text-sm font-bold">My Library</h3>
                 </div>

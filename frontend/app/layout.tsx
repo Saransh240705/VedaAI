@@ -20,10 +20,10 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "Veda AI",
-  description: "Veda AI",
+  title: "PrepStack AI",
+  description: "PrepStack AI",
   icons: {
-    icon: "/icon.png",
+    icon: "/icon.jpeg",
   },
 };
 

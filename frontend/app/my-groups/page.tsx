@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { 
-  Users, 
-  Plus, 
-  BookOpen, 
-  Clock, 
-  ArrowRight, 
-  GraduationCap, 
+import {
+  Users,
+  Plus,
+  BookOpen,
+  Clock,
+  ArrowRight,
+  GraduationCap,
   Loader2,
-  Trash2 
+  Trash2,
 } from "lucide-react";
 import Image from "next/image";
 import { BACKEND_URL } from "../config";
@@ -31,7 +31,7 @@ export default function MyGroupsPage() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  
+
   const [newGroupName, setNewGroupName] = useState("");
   const [newGroupSubject, setNewGroupSubject] = useState("");
   const [newGroupGrade, setNewGroupGrade] = useState("Class V");
@@ -39,14 +39,14 @@ export default function MyGroupsPage() {
   // Fetch groups on mount
   const fetchGroups = async () => {
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
-      const userEmail = localStorage.getItem("vedaai_user_email") || "";
-      
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
+      const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+
       const res = await fetch(`${BACKEND_URL}/api/groups`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "x-user-email": userEmail
-        }
+          Authorization: `Bearer ${token}`,
+          "x-user-email": userEmail,
+        },
       });
       if (res.ok) {
         const data = await res.json();
@@ -78,8 +78,8 @@ export default function MyGroupsPage() {
     ];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const token = localStorage.getItem("vedaai_auth_token") || "";
-    const userEmail = localStorage.getItem("vedaai_user_email") || "";
+    const token = localStorage.getItem("PrepStackai_auth_token") || "";
+    const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
 
     const newGroupPayload = {
       name: newGroupName,
@@ -96,10 +96,10 @@ export default function MyGroupsPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-          "x-user-email": userEmail
+          Authorization: `Bearer ${token}`,
+          "x-user-email": userEmail,
         },
-        body: JSON.stringify(newGroupPayload)
+        body: JSON.stringify(newGroupPayload),
       });
       if (res.ok) {
         const savedGroup = await res.json();
@@ -122,12 +122,12 @@ export default function MyGroupsPage() {
     if (!confirm("Are you sure you want to delete this student group?")) return;
 
     try {
-      const token = localStorage.getItem("vedaai_auth_token") || "";
+      const token = localStorage.getItem("PrepStackai_auth_token") || "";
       const res = await fetch(`${BACKEND_URL}/api/groups/${groupId}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (res.ok) {
         setGroups((prev) => prev.filter((g) => g._id !== groupId));
@@ -144,14 +144,15 @@ export default function MyGroupsPage() {
     return (
       <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-24 flex flex-col items-center justify-center min-h-[50vh] font-bricolage text-black">
         <Loader2 className="w-10 h-10 animate-spin text-[#FF7950] mb-4" />
-        <p className="font-semibold text-zinc-500 animate-pulse">Loading classes and groups...</p>
+        <p className="font-semibold text-zinc-500 animate-pulse">
+          Loading classes and groups...
+        </p>
       </div>
     );
   }
 
   return (
     <div className="lg:ml-84 lg:w-[70rem] w-full px-4 lg:px-0 py-4 lg:py-6 font-bricolage text-black min-h-[85vh] pb-24 relative flex flex-col gap-5 lg:gap-6">
-      
       {/* Page Title & Action Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
@@ -182,7 +183,9 @@ export default function MyGroupsPage() {
             <GraduationCap className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Total Students</h3>
+            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+              Total Students
+            </h3>
             <p className="text-2xl font-black text-zinc-900 mt-0.5">
               {groups.reduce((acc, g) => acc + g.studentsCount, 0)}
             </p>
@@ -194,8 +197,12 @@ export default function MyGroupsPage() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Active Batches</h3>
-            <p className="text-2xl font-black text-zinc-900 mt-0.5">{groups.length}</p>
+            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+              Active Batches
+            </h3>
+            <p className="text-2xl font-black text-zinc-900 mt-0.5">
+              {groups.length}
+            </p>
           </div>
         </div>
 
@@ -204,7 +211,9 @@ export default function MyGroupsPage() {
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Active Papers</h3>
+            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+              Active Papers
+            </h3>
             <p className="text-2xl font-black text-zinc-900 mt-0.5">
               {groups.reduce((acc, g) => acc + g.activeAssignments, 0)}
             </p>
@@ -216,7 +225,9 @@ export default function MyGroupsPage() {
       {groups.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-3xl border border-zinc-100">
           <Users className="w-12 h-12 text-zinc-300 mb-3" />
-          <p className="font-semibold text-zinc-500 text-base">No groups available. Create one to get started!</p>
+          <p className="font-semibold text-zinc-500 text-base">
+            No groups available. Create one to get started!
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
@@ -228,34 +239,52 @@ export default function MyGroupsPage() {
                 className="bg-white rounded-3xl overflow-hidden border border-zinc-200/60 shadow-[0_4px_30px_rgba(0,0,0,0.01)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.03)] hover:scale-[1.01] transition-all flex flex-col justify-between"
               >
                 {/* Colored Header Banner */}
-                <div className={`bg-gradient-to-r ${group.color} p-5 text-white flex flex-col gap-1`}>
+                <div
+                  className={`bg-gradient-to-r ${group.color} p-5 text-white flex flex-col gap-1`}
+                >
                   <span className="text-[10px] font-black uppercase tracking-widest bg-white/20 w-fit px-2 py-0.5 rounded-full border border-white/10">
                     {group.grade}
                   </span>
-                  <h3 className="text-lg font-black tracking-tight mt-1 truncate">{group.name}</h3>
-                  <p className="text-white/80 text-xs font-medium truncate">{group.subject}</p>
+                  <h3 className="text-lg font-black tracking-tight mt-1 truncate">
+                    {group.name}
+                  </h3>
+                  <p className="text-white/80 text-xs font-medium truncate">
+                    {group.subject}
+                  </p>
                 </div>
 
                 {/* Metrics Panel */}
                 <div className="p-5 flex flex-col gap-4">
                   <div className="grid grid-cols-3 gap-2 border-b border-zinc-100 pb-4 text-center">
                     <div className="flex flex-col">
-                      <span className="text-[9px] font-bold text-zinc-400 uppercase">Students</span>
-                      <span className="font-extrabold text-sm text-zinc-800 mt-0.5">{group.studentsCount}</span>
+                      <span className="text-[9px] font-bold text-zinc-400 uppercase">
+                        Students
+                      </span>
+                      <span className="font-extrabold text-sm text-zinc-800 mt-0.5">
+                        {group.studentsCount}
+                      </span>
                     </div>
                     <div className="flex flex-col border-x border-zinc-100">
-                      <span className="text-[9px] font-bold text-zinc-400 uppercase">Active Tests</span>
-                      <span className="font-extrabold text-sm text-zinc-800 mt-0.5">{group.activeAssignments}</span>
+                      <span className="text-[9px] font-bold text-zinc-400 uppercase">
+                        Active Tests
+                      </span>
+                      <span className="font-extrabold text-sm text-zinc-800 mt-0.5">
+                        {group.activeAssignments}
+                      </span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[9px] font-bold text-zinc-400 uppercase">Avg Score</span>
-                      <span className="font-extrabold text-sm text-emerald-600 mt-0.5">{group.averageScore}</span>
+                      <span className="text-[9px] font-bold text-zinc-400 uppercase">
+                        Avg Score
+                      </span>
+                      <span className="font-extrabold text-sm text-emerald-600 mt-0.5">
+                        {group.averageScore}
+                      </span>
                     </div>
                   </div>
 
                   {/* Action buttons inside group */}
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={() => handleDeleteGroup(groupId)}
                       className="flex-1 text-center py-2.5 bg-zinc-50 border border-zinc-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 text-zinc-800 font-extrabold text-xs rounded-full transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5"
                     >
@@ -279,13 +308,19 @@ export default function MyGroupsPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl p-6 lg:p-8 w-full max-w-[440px] border border-zinc-200/50 shadow-2xl flex flex-col gap-5 relative animate-in slide-in-from-bottom-4 duration-300">
             <div>
-              <h3 className="text-lg lg:text-xl font-black text-black uppercase tracking-tight">Create Batch Group</h3>
-              <p className="text-[#5E5E5ECC] text-xs mt-0.5">Setup a new class to distribute exams instantly.</p>
+              <h3 className="text-lg lg:text-xl font-black text-black uppercase tracking-tight">
+                Create Batch Group
+              </h3>
+              <p className="text-[#5E5E5ECC] text-xs mt-0.5">
+                Setup a new class to distribute exams instantly.
+              </p>
             </div>
 
             <form onSubmit={handleCreateGroup} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-zinc-700 uppercase">Group Name</label>
+                <label className="text-xs font-bold text-zinc-700 uppercase">
+                  Group Name
+                </label>
                 <input
                   type="text"
                   required
@@ -297,7 +332,9 @@ export default function MyGroupsPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-zinc-700 uppercase">Subject Details</label>
+                <label className="text-xs font-bold text-zinc-700 uppercase">
+                  Subject Details
+                </label>
                 <input
                   type="text"
                   required
@@ -309,7 +346,9 @@ export default function MyGroupsPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-zinc-700 uppercase">Grade / Standard</label>
+                <label className="text-xs font-bold text-zinc-700 uppercase">
+                  Grade / Standard
+                </label>
                 <select
                   value={newGroupGrade}
                   onChange={(e) => setNewGroupGrade(e.target.value)}
@@ -353,7 +392,6 @@ export default function MyGroupsPage() {
           </div>
         </div>
       )}
-
     </div>
   );
 }

@@ -1,5 +1,5 @@
-require("dotenv").config();
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import "dotenv/config";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 async function testGemini() {
   console.log("Testing Gemini API Key...");
@@ -9,7 +9,7 @@ async function testGemini() {
     console.log("API Key preview:", apiKey.substring(0, 8) + "..." + apiKey.substring(apiKey.length - 4));
   }
 
-  const genAI = new GoogleGenerativeAI(apiKey);
+  const genAI = new GoogleGenerativeAI(apiKey as string);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
@@ -17,7 +17,7 @@ async function testGemini() {
     const result = await model.generateContent("Hello! What is your name and version?");
     console.log("Response text:", result.response.text());
   } catch (error) {
-    console.error("Gemini API Error:", error.message || error);
+    console.error("Gemini API Error:", error);
   }
 }
 

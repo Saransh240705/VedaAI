@@ -7,7 +7,11 @@ import NavBar from "./NavBar";
 import BottomNavBar from "./BottomNavBar";
 import { Loader2 } from "lucide-react";
 
-export default function AppLayoutWrapper({ children }: { children: React.ReactNode }) {
+export default function AppLayoutWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -16,10 +20,11 @@ export default function AppLayoutWrapper({ children }: { children: React.ReactNo
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem("vedaai_auth_token");
-      const userEmail = localStorage.getItem("vedaai_user_email") || "";
-      const onboarded = localStorage.getItem(`vedaai_onboarded_${userEmail}`) === "true";
-      
+      const token = localStorage.getItem("PrepStackai_auth_token");
+      const userEmail = localStorage.getItem("PrepStackai_user_email") || "";
+      const onboarded =
+        localStorage.getItem(`PrepStackai_onboarded_${userEmail}`) === "true";
+
       const loggedIn = !!token;
       setIsAuthenticated(loggedIn);
       setIsOnboarded(onboarded);
@@ -56,13 +61,13 @@ export default function AppLayoutWrapper({ children }: { children: React.ReactNo
     };
 
     window.addEventListener("storage", handleStorageChange);
-    
+
     // Custom event to listen for local authentication updates immediately in the same tab
-    window.addEventListener("vedaai_auth_sync", handleStorageChange);
+    window.addEventListener("PrepStackai_auth_sync", handleStorageChange);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("vedaai_auth_sync", handleStorageChange);
+      window.removeEventListener("PrepStackai_auth_sync", handleStorageChange);
     };
   }, [pathname, router]);
 
@@ -73,7 +78,9 @@ export default function AppLayoutWrapper({ children }: { children: React.ReactNo
     return (
       <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#fafafa] font-bricolage text-black">
         <Loader2 className="w-10.5 h-10.5 animate-spin text-zinc-800 mb-4" />
-        <p className="font-semibold text-zinc-500 animate-pulse">Synchronizing Session...</p>
+        <p className="font-semibold text-zinc-500 animate-pulse">
+          Synchronizing Session...
+        </p>
       </div>
     );
   }
